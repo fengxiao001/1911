@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.dao.TestDao">
+<insert id="addBM" parameterType="map">
+insert into bumen values(#{uuid},#{bmname})
+</insert>
+
+<resultMap type="com.st.bean.TreeBean" id="treebean">
+<result column="parent_id" property="id"/>
+<result column="parent_name" property="title"/>
+<collection property="children" ofType="com.st.bean.TreeBean">
+<result column="per_id" property="id"/>
+<result column="per_name" property="title"/>
+</collection>
+</resultMap>
+
+<select id="treeJson" resultMap="treebean">
+SELECT a.per_id AS parent_id ,a.per_name AS parent_name,b.per_id,b.per_name FROM permission a
+LEFT JOIN permission b on a.per_id=b.parent_id WHERE a.parent_id is NULL
+</select>
+
+<select id="checkuser" parameterType="map" resultType="map">
+select * from role where role_id like '%${checktext}%'
+or role_name like '%${checktext}%'
+</select>
+
+<insert id="insertuser" parameterType="map">
+insert into role (role_name,role_id) values(#{role_name},#{role_id})
+</insert>
+
+<update id="updateuser" parameterType="map">
+update role set
+	    role_name=#{role_name}
+		where role_id=#{role_id}
+</update>
+
+<delete id="deluser" parameterType="map">
+	delete from role where
+		role_id=#{role_id}
+</delete>
+
+<!--用户查询  -->
+<select id="chaxun" parameterType="map" resultType="map">
+SELECT a.*,GROUP_CONCAT(c.role_name) as zhiwei from
+		`t_user` as a LEFT JOIN user_role as b on a.faceid = b.faceid
+		LEFT JOIN role AS c on b.role_id = c.role_id  ORDER BY
+		faceid 
+</select>
+
+<!--用户增加  -->
+<insert id="insertyonghu" parameterType="map">
+insert into t_user (facename,faceid) values(#{facename},#{faceid})
+</insert>
+
+<!--用户修改  -->
+<update id="updateyonghu" parameterType="map">
+update t_user set
+	    facename=#{facename}
+		where faceid=#{faceid} 
+</update>
+
+<!--用户删除-->
+<delete id="delyonghu" parameterType="map">
+	delete from t_user where
+		faceid=#{faceid}
+</delete>
+
+<select id="positionlist" parameterType="map" resultType="map">
+select role_id value ,role_name title from role
+</select>
+
+<select id="findAllPattern" resultType="map">
+select visit_pattern from visit
+</select>
+
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.dao.YongHuD">
+<select id="checkyonghu" resultType="map">
+select * from kehu where customer_id like '%${checktext}%'
+or customer_name like '%${checktext}%'
+</select>
+<insert id="insertkehu" parameterType="map">
+insert into kehu (customer_id,customer_name,customer_man,customer_tel,customer_email,customer_addr,customer_public) values(#{customer_id},#{customer_name},#{customer_man},#{customer_tel},#{customer_addr},#{customer_email},#{customer_public})
+</insert>
+<update id="updatekehu" parameterType="map">
+update kehu set
+	    customer_name=#{customer_name},customer_man=#{customer_man},
+	    customer_tel=#{customer_tel},customer_email=#{customer_email},
+	    customer_addr=#{customer_addr}
+		where customer_id=#{customer_id}
+</update>
+<delete id="delkehu" parameterType="map">
+	delete from kehu where
+		customer_id=#{customer_id}
+</delete>
+
+<select id="checkbumen" resultType="map">
+select * from bumen where bmid like '%${checktext}%'
+or bmname like '%${checktext}%'
+</select>
+
+<insert id="insertbumen" parameterType="map">
+insert into bumen (bmname,managerr,) values(#{bmname},#{managerr})
+</insert>
+
+<update id="updatebumen" parameterType="map">
+update bumen set
+	    bmname=#{bmname}
+		where bmid=#{bmid}
+</update>
+
+<delete id="delbumen" parameterType="map">
+	delete from bumen where
+		bmid=#{bmid}
+</delete>
+
+<select id="findAll" resultType="map">
+select * from t_user
+</select>
+
+<update id="updatepingji" parameterType="map">
+update kehu set
+	     customer_grade=#{customer_grade}
+		where customer_id=#{customer_id}
+</update>
+
+<insert id="xxxUser" parameterType="map">
+insert into user_role (faceid,role_id)
+values
+<foreach collection="role_id" item="item" index="index" separator=",">
+(#{faceid},#{item})
+</foreach>
+</insert>
+
+<delete id="delUser_role" parameterType="map">
+delete from user_role where
+		faceid=#{faceid}
+</delete>
+<!--公海客户查询  -->
+<select id="checkgonghai" parameterType="map" resultType="map">
+select * from kehu  where customer_public =1 
+</select>
+
+<!--个人客户查询  -->
+<select id="checkpri" parameterType="map" resultType="map">
+select * from kehu  where customer_public =0 
+</select>
+<!-- 跟单 -->
+<update id="updategendan" parameterType="map">
+update kehu set
+	    customer_public=#{customer_public}
+		where customer_id=#{customer_id}
+</update>
+
+</mapper>

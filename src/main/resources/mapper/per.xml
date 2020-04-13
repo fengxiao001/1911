@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.dao.IPerD">
+
+<select id="checkper" parameterType="map" resultType="map">
+select * from permission where per_id like '%${checktext}%'
+or per_name like '%${checktext}%'
+</select>
+
+<insert id="insertper" parameterType="map">
+insert into permission  values(#{per_id},#{per_name},#{parent_id},#{per_code})
+</insert>
+
+<update id="updateper" parameterType="map">
+update permission set
+	    per_name=#{per_name},per_id=#{per_id},parent_id=#{parent_id},per_code=#{per_code}
+		where per_id=#{per_id}
+</update>
+
+<delete id="delper" parameterType="map">
+	delete from permission where
+		per_id=#{per_id}
+</delete>
+
+</mapper>
